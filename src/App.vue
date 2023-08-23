@@ -49,9 +49,6 @@ import Footer from "./components/Footer.vue"
                 <img className="aletheia_pix" alt="aletheia-pix-qrcode" src="aletheia-pix.png" />
             </section>
         </section>
-        <aside>
-            Intergração com banco
-        </aside>
     </main>
     <Footer />
 </template>
@@ -86,6 +83,7 @@ section.aletheia_qrcode {
 }
 
 .aletheia_pix {
+    margin-left: -205px;
     width: 300px;
     height: 300px;
 }
@@ -93,7 +91,7 @@ section.aletheia_qrcode {
 @media (min-width: 768px) {
     main {
         display: grid;
-        grid-template-columns: 205px 2fr 1fr;
+        grid-template-columns: 205px 2fr;
     }
     aside {
         display: flex;
