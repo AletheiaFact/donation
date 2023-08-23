@@ -1,5 +1,5 @@
-resource "aws_ssm_parameter" "aletheia" {
-    name = "foo",
-    type = "string",
-    value = "bar",
+resource "aws_ssm_parameter" "Aletheia" {
+    name  = "foo"
+    type  = "String"
+    value = "barr"
 }
