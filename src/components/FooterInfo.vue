@@ -1,11 +1,5 @@
-<script>
+<script setup lang="ts">
 import { FileTextOutlined } from "@ant-design/icons-vue";
-
-export default {
-  components: {
-    FileTextOutlined,
-  },
-};
 </script>
 
 <template>

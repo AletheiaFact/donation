@@ -46,7 +46,7 @@ import Footer from "./components/Footer.vue"
             </p>
     
             <section class="aletheia_qrcode">
-                <img className="aletheia_pix" alt="aletheia-pix-qrcode" src="aletheia-pix.png" />
+                <img className="aletheia_pix" alt="aletheia-pix-qrcode" src="./assets/aletheia-pix.png" />
             </section>
         </section>
     </main>
