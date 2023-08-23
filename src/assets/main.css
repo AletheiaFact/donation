@@ -3,6 +3,7 @@ body {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  background-color: #f6f6f6;
 }
 
 p, a, span {
@@ -15,4 +16,9 @@ h1, h2, h3, h4, h5, h6 {
 
 a {
   text-decoration: none;
+}
+
+#app {
+  display: flex;
+  flex-wrap: wrap;
 }
