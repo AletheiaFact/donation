@@ -130,7 +130,7 @@ jobs:
         npm ci --production
 
     - name: Build Static Website
-      run: npm run build-only
+      run: npm run build
 
     - name: Copy files to the production website with the AWS CLI
       run: |
