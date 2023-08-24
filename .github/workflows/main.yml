@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
-      DIST: build
+      DIST: dist
       REGION: ${{ secrets.AWS_REGION }}
       # DIST_ID: <cloud_front_distribution>
 
