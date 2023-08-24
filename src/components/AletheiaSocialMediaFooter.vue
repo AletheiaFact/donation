@@ -55,7 +55,7 @@
   
 <script setup lang="ts">
 import { Divider } from "ant-design-vue";
-import Instagram from "vue-material-design-icons";
+import Instagram from "vue-material-design-icons/Instagram.vue";
 import Linkedin from 'vue-material-design-icons/Linkedin.vue';
 import Github from 'vue-material-design-icons/Github.vue';
 import Facebook from 'vue-material-design-icons/Facebook.vue';
