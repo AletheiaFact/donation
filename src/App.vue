@@ -28,21 +28,21 @@ import Footer from "./components/Footer.vue"
         </aside>
     
         <section>
-            <Title msg="We want everyone to have equal access to knowledge, forever" />
+            <Title msg="Queremos que todos tenham acesso igual ao conhecimento, para sempre" />
             <p>
-                Thank you for considering a donation to the Aletheia, the nonprofit that hosts Aletheia and other crucial free knowledge projects.
+                Agradecemos por considerar uma doação à Aletheia, a organização sem fins lucrativos que hospeda a Aletheia e outros projetos cruciais de conhecimento livre.
             </p>
             <p>
-                Each year, because of the 2% of readers who give to support our mission, we can expand the reach of free knowledge to new corners of the world. If Aletheia matters and is useful to you too, please join them and donate €5, €20, €50 or whatever feels right to you today.
+                A cada ano, graças aos 2% dos leitores que contribuem para apoiar nossa missão, podemos expandir o alcance do conhecimento livre para novos cantos do mundo. Se a Aletheia também é importante e útil para você, por favor junte-se a eles e faça uma doação de €5, €20, €50 ou qualquer valor que pareça adequado para você hoje.
             </p>
             <p>
-                Aletheia is different. No advertising, no subscription fees, no paywalls. Those don't belong here. Aletheia is a place to learn, free from bias or agenda.
+                A Aletheia é diferente. Sem publicidade, sem taxas de assinatura, sem barreiras de pagamento. Isso não faz parte daqui. A Aletheia é um lugar para aprender, livre de viés ou agenda.
             </p>
             <p>
-                Today, we invite you to donate whatever feels right. Show the world that access to independent and unbiased information matters to you.
+                Hoje, convidamos você a fazer uma doação no valor que achar certo. Mostre ao mundo que o acesso a informações independentes e imparciais é importante para você.
             </p>
             <p>
-                Thank you.
+                Obrigado.
             </p>
     
             <section class="aletheia_qrcode">
