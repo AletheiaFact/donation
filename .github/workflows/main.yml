@@ -1,8 +1,7 @@
 name: "Terraform action"
 on:
   push:
-    branches:
-      - main
+    branches: [ master ]
   pull_request:
 permissions:
       id-token: write # This is required for aws oidc connection
@@ -12,7 +11,7 @@ env:
   TF_LOG: INFO
   AWS_REGION: ${{ secrets.AWS_REGION }}
 jobs:
-  deploy:
+  deploy-terraform:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -100,3 +99,45 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
+  
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    env:
+      BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+      DIST: build
+      REGION: ${{ secrets.AWS_REGION }}
+      # DIST_ID: <cloud_front_distribution>
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.REGION }}
+
+    # - uses: actions/setup-node@v2
+    #   with:
+    #     node-version: '14'
+
+    - name: Install Dependencies
+      run: |
+        node --version
+        npm ci --production
+
+    - name: Build Static Website
+      run: npm run build
+
+    - name: Copy files to the production website with the AWS CLI
+      run: |
+        aws s3 sync --delete ${{ env.DIST }} s3://${{ env.BUCKET }}
+
+    # - name: Invalidate the cache ????
+    #   run: |
+    #     aws cloudfront create-invalidation \
+    #       --distribution-id ${{ env.DIST_ID }} \
+    #       --paths "/*"
