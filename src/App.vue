@@ -34,84 +34,24 @@
             </section>
         </section>
         <aside className="donation_section">
-            <form>
-                <h2 className="donation_title">Donation amount (Real)</h2>
-                <div className="donation_frequency">
-                    <button
-                        type="button" 
-                        @click="selectedFrequency = 'once'" 
-                        :class="{ active: selectedFrequency === 'once', unactive: selectedFrequency !== 'once' }"
-                    >
-                        Just once
-                    </button>
-                    <button
-                        type="button"
-                        @click="selectedFrequency = 'monthly'"
-                        :class="{ active: selectedFrequency === 'monthly', unactive: selectedFrequency !== 'monthly' }"
-                    >
-                        Monthly
-                    </button>
-                </div>
-                <div class="amount_section">
-                    <ul>
-                        <li
-                            class="amount_button"
-                            v-for="amount in predefinedAmounts" :key="amount.id"
-                            @click="selectAmount(amount.value)"
-                            :class="{ active_amount: selectedAmount === amount.value }"
-                        >
-                            <input :id="amount.id" type="radio" v-model="selectedAmount" :value="amount.value" />
-                            <label>{{ amount.label }}</label>
-                        </li>
-                        <li
-                            @click="selectAmount(customAmount)"
-                            :class="{ active_amount: selectedAmount === customAmount }"
-                        >
-                            <input id="other" type="radio" v-model="selectedAmount" :value="customAmount" />
-                            <label>Other amount</label>
-                        </li>
-                    </ul>
-                    <PaypalButton />
-                </div>
-            </form>
+            <DonateForm />
         </aside>
     </main>
     <Footer />
 </template>
 
-<script>
+<script lang="ts">
 import Title from './components/Title.vue'
 import Footer from "./components/Footer/Footer.vue"
 import Paragraph from './components/Paragraph.vue';
-import PaypalButton from './components/PaypalButton.vue';
+import DonateForm from './components/Donate/DonateForm.vue';
 
 export default {
     components: {
         Title,
         Footer,
         Paragraph,
-        PaypalButton
-    },
-    data() {
-        return {
-            selectedFrequency: 'once',
-            predefinedAmounts: [
-                { id: '2', label: 'R$ 2', value: 2 },
-                { id: '5', label: 'R$ 5', value: 5 },
-                { id: '10', label: 'R$ 10', value: 10 },
-                { id: '20', label: 'R$ 20', value: 20 },
-                { id: '30', label: 'R$ 30', value: 30 },
-                { id: '50', label: 'R$ 50', value: 50 },
-                { id: '100', label: 'R$ 100', value: 100 },
-            ],
-            customAmount: 0,
-            selectedAmount: '', //default value
-        };
-    },
-    methods: {
-        selectAmount(amount) {
-            this.selectedAmount = amount;
-        },
+        DonateForm
     },
 };
 </script>
@@ -158,89 +98,6 @@ section.aletheia_qrcode {
     border-radius: 2px;
     padding: 24px;
     color: #222;
-}
-
-.donation_title {
-    margin-bottom: 6px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.donation_frequency {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 8px;
-}
-
-.donation_section button,
-.donation_section li {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-width: 2px;
-    height: 50px;
-    padding: 4px 12px;
-    font-size: 14px;
-    border-radius: 4px;
-    line-height: 20px;
-    min-width: 75px;
-}
-
-.donation_frequency > button {
-    flex: 1;
-}
-.unactive {
-    border-color: rgb(81, 81, 81);
-    background: rgb(255, 255, 255)
-}
-
-.active {
-    background: rgb(17, 39, 58);
-    border-color: rgb(17, 39, 58);
-    color: rgb(255, 255, 255);
-}
-
-.amount_section {
-    margin-top: 20px;
-}
-
-.amount_section ul {
-    display: flex;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.amount_section li {
-    border: 1px solid rgb(81, 81, 81);
-    background-color: #fefefe;
-    height: 60px;
-    font-size: 15px;
-    line-height: 1.2;
-    text-align: center;
-    flex: 1 0 0;
-}
-
-.amount_section li.active_amount {
-    background: rgb(17, 39, 58);
-    border-color: rgb(17, 39, 58);
-    color: rgb(255, 255, 255);
-}
-
-input[type="radio"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-    clip: rect(0 0 0 0);
 }
 
 @media (min-width: 768px) {
