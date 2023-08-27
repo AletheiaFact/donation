@@ -13,12 +13,23 @@ export default {
 			type: "submit",
 			fundingSource: paypal.FUNDING.PAYPAL,
 			style: {
-				layout: "vertical",
+				layout: "horizontal",
 				shape: "rect",
 				color: 'white',
+				tagline: false,
+				label: 'paypal',
+			},
+			onInit: function(data, actions) {
+				actions.disable();
+
+				const amountItems = document.querySelectorAll('.amount-list-item');
+				amountItems.forEach(item => {
+					item.addEventListener('click', function() {
+						actions.enable()
+					});
+				});
 			},
 			createOrder: async (data, actions) => {
-				console.log("this.amount", this.amount)
 				try {
 					const response = await fetch(`http://localhost:9597/orders/${this.amount ? this.amount.toFixed(2) : ""}`, {
 						method: "POST",
@@ -71,12 +82,3 @@ export default {
 	}
 }
 </script>
-
-<style scoped>
-#donate-button {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-</style>

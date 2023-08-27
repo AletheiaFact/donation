@@ -4,6 +4,7 @@
         <section class="amount-section">
             <ul>
                 <li
+                    class="amount-list-item"
                     v-for="amount in predefinedAmounts" :key="amount.id"
                     @click="handleAmountSelection(amount.value, true)"
                     :class="{ active_amount: selectedAmount === amount.value && selectedAmount !== customAmountValue }"
@@ -12,6 +13,7 @@
                     <label>{{ amount.label }}</label>
                 </li>
                 <li
+                    class="amount-list-item"
                     id="custom_amount_button"
                     @click="handleCustomButtonClicked"
                     :class="{ active_amount: isCustomButtonSelected}"
@@ -120,19 +122,19 @@ export default {
             if(this.isChecked) this.addTaxAmountToTotalAmount(amount)
             else this.totalAmount = amount;
         },
-
-        clearValues() {
-            this.isCustomButtonSelected = false
-            this.selectedAmount = null
-            this.totalAmount = null;
-        },
-
+        
         handleCustomButtonClicked() {
             this.clearValues();
             this.isCustomButtonSelected = true;
             this.$nextTick(() => {
                 this.$refs.customInput.focus();
             });
+        },
+
+        clearValues() {
+            this.isCustomButtonSelected = false
+            this.selectedAmount = null
+            this.totalAmount = null;
         },
     },
 };
