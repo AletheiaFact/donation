@@ -12,8 +12,11 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@aws-amplify/ui-vue": "^3.1.26",
     "@jamescoyle/vue-icon": "^0.1.2",
     "ant-design-vue": "^4.0.1",
+    "aws-amplify": "^5.3.10",
+    "axios": "^1.5.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "node-fetch": "^3.3.2",

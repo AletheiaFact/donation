@@ -3,6 +3,8 @@
 </template>
   
 <script>
+import { API } from 'aws-amplify';
+
 export default {
 	name: "PaypalButton",
 	props: {
@@ -10,7 +12,6 @@ export default {
 	},
 	mounted: function() {
 		paypal.Buttons({
-			type: "submit",
 			fundingSource: paypal.FUNDING.PAYPAL,
 			style: {
 				layout: "horizontal",
@@ -31,50 +32,36 @@ export default {
 			},
 			createOrder: async (data, actions) => {
 				try {
-					const response = await fetch(`http://localhost:9597/orders/${this.amount ? this.amount.toFixed(2) : ""}`, {
-						method: "POST",
-					});
-
-					const details = await response.json();
-					return details.id;
+					const response = 
+						await API.post("DonateAletheiaApi",`/orders/${this.amount ? this.amount.toFixed(2) : ""}`, {});
+					
+					return response.id;
 				} catch (error) {
 					console.error(error);
-					// Handle the error or display an appropriate error message to the user
+					//Todo: modal error
 				}
 			},
 			onApprove: async (data, actions) => {
 				try {
-					const response = await fetch(`http://localhost:9597/orders/${data.orderID}/capture`, {
-						method: "POST"
-					});
+					const response = 
+						await API.post("DonateAletheiaApi", `/orders/${data.orderID}/capture`, {})
 
-					const details = await response.json();
-					// Three cases to handle:
-					//   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-					//   (2) Other non-recoverable errors -> Show a failure message
-					//   (3) Successful transaction -> Show confirmation or thank you message
+					const errorDetail = Array.isArray(response.details) && response.details[0];
 
-					// This example reads a v2/checkout/orders capture response, propagated from the server
-					// You could use a different API or structure for your 'orderData'
-					const errorDetail = Array.isArray(details.details) && details.details[0];
-
-					if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
-					return actions.restart();
-					// https://developer.paypal.com/docs/checkout/integration-features/funding-failure/
-					}
+					if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') return actions.restart();
 
 					if (errorDetail) {
-						let msg = 'Sorry, your transaction could not be processed.';
+						let msg = 'Desculpe, sua transação não conseguiu ser processada.';
 						msg += errorDetail.description ? ' ' + errorDetail.description : '';
-						msg += details.debug_id ? ' (' + details.debug_id + ')' : '';
+						msg += response.debug_id ? ' (' + response.debug_id + ')' : '';
 						alert(msg);
 					}
 
-					// Successful capture! For demo purposes:
-					console.log('Capture result', details, JSON.stringify(details, null, 2));
+					//TODO: modal success
+					console.log('Capture result', response, JSON.stringify(response, null, 2));
 				} catch (error) {
 					console.error(error);
-					// Handle the error or display an appropriate error message to the user
+					//Todo: modal error
 				}
 			},
 		})

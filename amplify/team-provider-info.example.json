@@ -1,0 +1,29 @@
+{
+    "dev": {
+      "awscloudformation": {
+        "AuthRoleName": "amplify-donatealetheiaapi-dev-190524-authRole",
+        "UnauthRoleArn": "arn:aws:iam::134187360702:role/amplify-donatealetheiaapi-dev-190524-unauthRole",
+        "AuthRoleArn": "arn:aws:iam::134187360702:role/amplify-donatealetheiaapi-dev-190524-authRole",
+        "Region": "eu-north-1",
+        "DeploymentBucketName": "amplify-donatealetheiaapi-dev-190524-deployment",
+        "UnauthRoleName": "amplify-donatealetheiaapi-dev-190524-unauthRole",
+        "StackName": "amplify-donatealetheiaapi-dev-190524",
+        "StackId": "arn:aws:cloudformation:eu-north-1:134187360702:stack/amplify-donatealetheiaapi-dev-190524/44b29a40-468e-11ee-920d-0e157d9c922a",
+        "AmplifyAppId": "d38ysu02llisl0"
+      },
+      "categories": {
+        "function": {
+          "donateApi": {
+            "clientId": "",
+            "clientSecret": "",
+            "environment": "",
+            "deploymentBucketName": "amplify-donatealetheiaapi-dev-190524-deployment",
+            "s3Key": "amplify-builds/donateApi-57574843616263703758-build.zip"
+          }
+        },
+        "api": {
+          "DonateAletheiaApi": {}
+        }
+      }
+    }
+  }

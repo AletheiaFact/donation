@@ -1,0 +1,82 @@
+{
+  "api": {
+    "DonateAletheiaApi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "donateApi"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "donateApi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "paymentApi"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "donateApi": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_donateApi_clientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "donateApi"
+        }
+      ]
+    },
+    "AMPLIFY_function_donateApi_clientSecret": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "donateApi"
+        }
+      ]
+    },
+    "AMPLIFY_function_donateApi_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "donateApi"
+        }
+      ]
+    },
+    "AMPLIFY_function_donateApi_environment": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "donateApi"
+        }
+      ]
+    },
+    "AMPLIFY_function_donateApi_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "donateApi"
+        }
+      ]
+    }
+  }
+}
