@@ -31,7 +31,7 @@
                 </li>
             </ul>
             <div class="text-error" v-if="error">{{ error }}</div>
-            <div v-if="taxAmount" style="margin-top: 8px; display: flex; gap: 4px; align-items: flex-start;">
+            <div v-if="taxAmount > 0" style="margin-top: 8px; display: flex; gap: 4px; align-items: flex-start;">
                 <div style="margin-top: 4px;">
                     <input type="checkbox" id="tax_amount" @change="handleTaxCheckboxChange" />
                 </div>
@@ -46,8 +46,8 @@
             </div>
             <div class="donation_explanation">
                 <h4>Para onde vai sua doação</h4>
-                <p><strong>Tecnologia:</strong> Servidores, largura de banda, manutenção, desenvolvimento. A Wikipedia é um dos 10 principais sites do mundo e funciona com uma fração do que gastam outros sites importantes.</p>
-                <p><strong>Pessoas e Projetos:</strong> Os outros sites importantes têm milhares de funcionários. Temos cerca de 700 funcionários e prestadores de serviços para apoiar uma ampla variedade de projetos, tornando a sua doação um grande investimento em uma organização sem fins lucrativos altamente eficiente.</p>
+                <p><strong>Tecnologia:</strong> Servidores, largura de banda, manutenção, desenvolvimento.</p>
+                <p><strong>Pessoas e Projetos:</strong> Os outros sites importantes têm milhares de funcionários. Temos cerca de 30 funcionários e prestadores de serviços para apoiar uma ampla variedade de projetos, tornando a sua doação um grande investimento em uma organização sem fins lucrativos altamente eficiente.</p>
             </div>
         </section>
     </form>
@@ -82,14 +82,11 @@ export default {
     },
     methods: {
         handleAmountSelection(amount, predefinedAmounts) {
+            document.querySelector('#error').classList.add('hidden');
             this.customAmountValue = null
             if (predefinedAmounts) this.clearValues();
             this.selectedAmount = amount;
             this.calculateTotalAmount(this.selectedAmount)
-        },
-
-        isSelected(amountValue) {
-            return this.selectedAmount === amountValue;
         },
 
         handleCustomAmountInput({ target }) {
@@ -100,7 +97,11 @@ export default {
         },
 
         CustomValueIsGreaterThanMinumunValue(value) {
-            this.error = value >= 0 && value <= 0.93 ? "Por favor selecione uma quantidade (mínimo 0.93 Reais)" : null
+            if(value >= 0 && value <= 0.93) {
+                this.error = value >= 0 && value <= 0.93 ? "Por favor selecione uma quantidade (mínimo 0.93 Reais)" : null
+            } else {
+                document.querySelector('#error').classList.add('hidden');
+            }
         },
 
         calculateTaxAmount(amount) {
@@ -249,6 +250,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .donation_explanation > h4 {
+    text-align: center;
     margin-top: 16px;
     font-weight: 600;
 }

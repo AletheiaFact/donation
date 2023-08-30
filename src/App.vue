@@ -69,7 +69,7 @@ main {
 
 section {
     display: flex;
-    justify-content: center;
+    align-items: center;
     flex-direction: column;
     font-size: 16px;
 }
@@ -86,7 +86,6 @@ section.aletheia_qrcode {
 }
 
 .aletheia_pix {
-    margin-left: -205px;
     width: 300px;
     height: 300px;
 }

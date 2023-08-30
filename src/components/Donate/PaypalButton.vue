@@ -1,4 +1,5 @@
 <template>
+	<div id="error" class="hidden">Por favor selecione uma quantidade (mínimo 0.93 Reais)</div>
 	<div ref="paypal"></div>
 </template>
   
@@ -29,6 +30,11 @@ export default {
 						actions.enable()
 					});
 				});
+			},
+			onClick: function() {
+				if(document.querySelector('.active_amount') === null) {
+					document.querySelector('#error').classList.remove('hidden');
+				}
 			},
 			createOrder: async (data, actions) => {
 				try {
@@ -69,3 +75,17 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+
+#error {
+    margin: 8px 0;
+    color: #ff4d4f;
+    font-size: 12px;
+}
+
+.hidden {
+	display: none;
+}
+
+</style>
