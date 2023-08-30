@@ -5,6 +5,7 @@
   
 <script>
 import { API } from 'aws-amplify';
+import { message } from 'ant-design-vue';
 
 export default {
 	name: "PaypalButton",
@@ -32,6 +33,7 @@ export default {
 				});
 			},
 			onClick: function() {
+				//TODO: Add Umami analytics
 				if(document.querySelector('.active_amount') === null) {
 					document.querySelector('#error').classList.remove('hidden');
 				}
@@ -43,8 +45,10 @@ export default {
 					
 					return response.id;
 				} catch (error) {
-					console.error(error);
-					//Todo: modal error
+					message.error({
+						content: () => `${error.message}`,
+						time: 6,
+					});
 				}
 			},
 			onApprove: async (data, actions) => {
@@ -63,11 +67,15 @@ export default {
 						alert(msg);
 					}
 
-					//TODO: modal success
-					console.log('Capture result', response, JSON.stringify(response, null, 2));
+					message.success({
+						content: () => `Doação no valor de R$${this.amount} realizada com sucesso. A Aletheia Fact agradece !`,
+						time: 6,
+					});
 				} catch (error) {
-					console.error(error);
-					//Todo: modal error
+					message.error({
+						content: () => `${error.message}`,
+						time: 6,
+					});
 				}
 			},
 		})
