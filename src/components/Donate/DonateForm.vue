@@ -1,6 +1,6 @@
 <template>
     <form class="donate-form">
-        <h2 class="donate-title">Donation amount (Real)</h2>
+        <h2 class="donate-title">Valor da doação (Real)</h2>
         <section class="amount-section">
             <ul>
                 <li
@@ -31,7 +31,7 @@
                 </li>
             </ul>
             <div class="text-error" v-if="error">{{ error }}</div>
-            <div v-if="taxAmount > 0" style="margin-top: 8px; display: flex; gap: 4px; align-items: flex-start;">
+            <div v-if="taxAmount !== null && taxAmount > 0" style="margin-top: 8px; display: flex; gap: 4px; align-items: flex-start;">
                 <div style="margin-top: 4px;">
                     <input type="checkbox" id="tax_amount" @change="handleTaxCheckboxChange" />
                 </div>
@@ -53,10 +53,12 @@
     </form>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import PaypalButton from './PaypalButton.vue';
 
-export default {
+export default defineComponent({
+    name: "DonateForm",
     components: {
         PaypalButton
     },
@@ -71,54 +73,71 @@ export default {
                 { id: '50', label: 'R$ 50', value: 50 },
                 { id: '100', label: 'R$ 100', value: 100 },
             ],
-            customAmountValue: null,
-            taxAmount: null,
-            selectedAmount: null,
-            totalAmount: null,
+            customAmountValue: null as number | null,
+            taxAmount: null as number | null,
+            selectedAmount: null as number | null,
+            totalAmount: null as number | null,
             isChecked: false,
             isCustomButtonSelected: false,
-            error: null,
+            error: null as string | null,
         };
     },
     methods: {
-        handleAmountSelection(amount, predefinedAmounts) {
-            document.querySelector('#error').classList.add('hidden');
+        handleAmountSelection(amount: number, predefinedAmounts: boolean): void {
+            this.hideErrorMessage()
             this.customAmountValue = null
             if (predefinedAmounts) this.clearValues();
             this.selectedAmount = amount;
             this.calculateTotalAmount(this.selectedAmount)
         },
 
-        handleCustomAmountInput({ target }) {
-            const inputValue = (target).value;
-            this.customAmountValue = Number(inputValue);
-            this.CustomValueIsGreaterThanMinumunValue(this.customAmountValue);
-            if (this.customAmountValue >= 0) this.calculateTotalAmount(this.customAmountValue);
-        },
-
-        CustomValueIsGreaterThanMinumunValue(value) {
-            if(value >= 0 && value <= 0.93) {
-                this.error = value >= 0 && value <= 0.93 ? "Por favor selecione uma quantidade (mínimo 0.93 Reais)" : null
-            } else {
-                document.querySelector('#error').classList.add('hidden');
+        handleCustomAmountInput(event: Event): void {
+            const target = event.target as HTMLInputElement;
+            if (target instanceof HTMLInputElement) {
+                const inputValue = target.value;
+                this.customAmountValue = Number(inputValue);
+                this.CustomValueIsGreaterThanMinumunValue(this.customAmountValue);
+                if (this.customAmountValue >= 0) {
+                    this.calculateTotalAmount(this.customAmountValue);
+                }
             }
         },
 
-        calculateTaxAmount(amount) {
+        hideErrorMessage() {
+            const errorElement = document.querySelector('#error')
+            if (errorElement) {
+                errorElement.classList.add('hidden');
+            }
+        },
+
+        CustomValueIsGreaterThanMinumunValue(value: number): void {
+            if(value >= 0 && value <= 0.93) {
+                this.error = value >= 0 && value <= 0.93 ? "Por favor selecione uma quantidade (mínimo 0.93 Reais)" : null
+            } else {
+                this.hideErrorMessage()
+            }
+        },
+
+        calculateTaxAmount(amount: number): void {
             this.taxAmount = amount >= 9 ? (amount * 0.04) : 0.35
         },
 
-        handleTaxCheckboxChange({ target }) {
-            this.isChecked = target.checked
-            if (this.isChecked) this.addTaxAmountToTotalAmount(this.totalAmount);
-            else this.totalAmount = this.selectedAmount || this.customAmountValue;
+        handleTaxCheckboxChange(event: Event): void {
+            const target = event.target as HTMLInputElement;
+            if (target) {
+                this.isChecked = target.checked;
+                if (this.isChecked) {
+                    this.addTaxAmountToTotalAmount(this.totalAmount);
+                } else {
+                    this.totalAmount = this.selectedAmount || this.customAmountValue;
+                }
+            }
         },
-
-        addTaxAmountToTotalAmount(amount) {
+        addTaxAmountToTotalAmount(amount: any) {
             this.totalAmount = amount + this.taxAmount
         },
 
-        calculateTotalAmount(amount) {
+        calculateTotalAmount(amount: number) {
             this.calculateTaxAmount(amount)
             if(this.isChecked) this.addTaxAmountToTotalAmount(amount)
             else this.totalAmount = amount;
@@ -128,7 +147,10 @@ export default {
             this.clearValues();
             this.isCustomButtonSelected = true;
             this.$nextTick(() => {
-                this.$refs.customInput.focus();
+                const customInput = this.$refs.customInput as HTMLInputElement | undefined;
+                if (customInput) {
+                    customInput.focus();
+                }
             });
         },
 
@@ -138,7 +160,7 @@ export default {
             this.totalAmount = null;
         },
     },
-};
+});
 </script>
 
 <style scoped>

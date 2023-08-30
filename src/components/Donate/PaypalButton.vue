@@ -3,18 +3,25 @@
 	<div ref="paypal"></div>
 </template>
   
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import { API } from 'aws-amplify';
 import { message } from 'ant-design-vue';
 
-export default {
+declare global {
+	interface Window {
+		paypal: any;
+	}
+}
+
+export default defineComponent({
 	name: "PaypalButton",
 	props: {
-		amount: Number,
-	},
+    	amount: Number as () => number | null,
+  	},
 	mounted: function() {
-		paypal.Buttons({
-			fundingSource: paypal.FUNDING.PAYPAL,
+		window.paypal.Buttons({
+			fundingSource: window.paypal.FUNDING.PAYPAL,
 			style: {
 				layout: "horizontal",
 				shape: "rect",
@@ -22,7 +29,7 @@ export default {
 				tagline: false,
 				label: 'paypal',
 			},
-			onInit: function(data, actions) {
+			onInit: function(data: any, actions: any): void {
 				actions.disable();
 
 				const amountItems = document.querySelectorAll('.amount-list-item');
@@ -35,23 +42,23 @@ export default {
 			onClick: function() {
 				//TODO: Add Umami analytics
 				if(document.querySelector('.active_amount') === null) {
-					document.querySelector('#error').classList.remove('hidden');
+					const errorElement = document.querySelector('#error')
+					if(errorElement) errorElement.classList.remove('hidden');
 				}
 			},
-			createOrder: async (data, actions) => {
+			createOrder: async () => {
 				try {
 					const response = 
 						await API.post("DonateAletheiaApi",`/orders/${this.amount ? this.amount.toFixed(2) : ""}`, {});
 					
 					return response.id;
-				} catch (error) {
+				} catch (error: any) {
 					message.error({
 						content: () => `${error.message}`,
-						time: 6,
 					});
 				}
 			},
-			onApprove: async (data, actions) => {
+			onApprove: async (data: any, actions: any) => {
 				try {
 					const response = 
 						await API.post("DonateAletheiaApi", `/orders/${data.orderID}/capture`, {})
@@ -69,19 +76,17 @@ export default {
 
 					message.success({
 						content: () => `Doação no valor de R$${this.amount} realizada com sucesso. A Aletheia Fact agradece !`,
-						time: 6,
 					});
-				} catch (error) {
+				} catch (error: any) {
 					message.error({
 						content: () => `${error.message}`,
-						time: 6,
 					});
 				}
 			},
 		})
 		.render(this.$refs.paypal);
 	}
-}
+})
 </script>
 
 <style scoped>

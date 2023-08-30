@@ -22,12 +22,12 @@
     </header>
     <main>
         <section style="padding: 10px 0;">
-            <Title msg="We want everyone to have equal access to knowledge, forever" />
-            <Paragraph msg="Thank you for considering a donation to the Aletheia, the nonprofit that hosts Aletheia and other crucial free knowledge projects." />
-            <Paragraph msg="Each year, because of the 2% of readers who give to support our mission, we can expand the reach of free knowledge to new corners of the world. If Aletheia matters and is useful to you too, please join them and donate €5, €20, €50 or whatever feels right to you today." />
-            <Paragraph msg="Aletheia is different. No advertising, no subscription fees, no paywalls. Those don't belong here. Aletheia is a place to learn, free from bias or agenda." />
-            <Paragraph msg="Today, we invite you to donate whatever feels right. Show the world that access to independent and unbiased information matters to you." />
-            <Paragraph msg="Thank you." />
+            <Title msg="Queremos que todos tenham igual acesso ao conhecimento, para sempre" />
+            <Paragraph msg="Obrigado por considerar uma doação para a Aletheia, a organização sem fins lucrativos que hospeda a Aletheia e outros projetos cruciais de conhecimento gratuito." />
+            <Paragraph msg="A cada ano, graças aos 2% de leitores que doam para apoiar a nossa missão, podemos expandir o alcance do conhecimento gratuito para novos cantos do mundo. Se Aletheia é importante e útil para você também, junte-se a eles e doe 5€, 20€, 50€ ou o que achar melhor para você hoje." />
+            <Paragraph msg="Aletheia é diferente. Sem publicidade, sem taxas de assinatura, sem acesso pago. Esses não pertencem aqui. Aletheia é um lugar para aprender, livre de preconceitos ou agendas." />
+            <Paragraph msg="Hoje, convidamos você a doar o que achar melhor. Mostre ao mundo que o acesso a informações independentes e imparciais é importante para você." />
+            <Paragraph msg="obrigado." />
     
             <section class="aletheia_qrcode">
                 <img className="aletheia_pix" alt="aletheia-pix-qrcode" src="./assets/aletheia-pix.png" />
@@ -69,7 +69,6 @@ main {
 
 section {
     display: flex;
-    align-items: center;
     flex-direction: column;
     font-size: 16px;
 }
