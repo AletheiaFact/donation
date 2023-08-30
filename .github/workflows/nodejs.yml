@@ -5,9 +5,9 @@ name: Aletheia Donate CI
 
 on:
   push:
-    branches: [ stage, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ stage, develop ]
+    branches: [ main ]
 
 jobs:
   build:
