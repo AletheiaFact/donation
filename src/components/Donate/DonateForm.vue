@@ -34,7 +34,23 @@
             <div style="margin-top: 8px;">
                 <PaypalButton :amount="totalAmount" />
             </div>
-            
+            <div>
+                <button
+                    class="credit-card-button"
+                    @click="showCardForm($event)"
+                    style="
+                        width: 100%;
+                        display: flex;
+                        margin-top: 4px;
+                        gap: 8px;
+                        align-items: center;
+                    "
+                >
+                    <span style="margin-top: 5px;"><CreditCardOutline /></span>
+                    Cartão de crédito ou débito
+                </button>
+                <CardForm :amount="totalAmount" :isCardFormVisible="isCardFormVisible" />
+            </div>
         </section>
     </form>
     <div class="donation_explanation">
@@ -47,6 +63,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import PaypalButton from './PaypalButton.vue';
+import CreditCardOutline from 'vue-material-design-icons/CreditCardOutline.vue';
+import CardForm from './CardForm.vue';
 
 const predefinedAmounts = [
     { id: '2', label: 'R$ 2', value: 2 },
@@ -58,10 +76,11 @@ const predefinedAmounts = [
     { id: '100', label: 'R$ 100', value: 100 },
 ]
 
-const totalAmount = ref()
-const customAmountValue = ref()
-const isCustomButtonSelected = ref()
-const customInput = ref()
+const totalAmount = ref();
+const customAmountValue = ref();
+const isCustomButtonSelected = ref();
+const customInput = ref();
+const isCardFormVisible = ref(false);
 
 const handleAmountSelection = (amount: number): void => {
     customAmountValue.value = null;
@@ -84,6 +103,15 @@ const clearTotalAmountAndButtonSelectedValues = () => {
     isCustomButtonSelected.value = false
     totalAmount.value = null;
 }
+
+const showCardForm = (event: Event) => {
+    event.preventDefault();
+    if(totalAmount.value) {
+        isCardFormVisible.value = !isCardFormVisible.value
+    }
+}
+
+
 </script>
 
 <style scoped>
@@ -202,5 +230,18 @@ input[type=number]::-webkit-outer-spin-button {
 .donation_explanation > p {
     font-size: 12px;
     line-height: 1.1rem;
+}
+
+.credit-card-button {
+    border-width: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    padding-bottom: 0;
+    border-radius: 4px;
+    background: #11273a;
+    border-color: #11273a;
+    color: #fff;
 }
 </style>
