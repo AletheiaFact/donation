@@ -14,6 +14,20 @@
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
     },
+    "PaymentAletheiaApi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "cardPaymentFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "donateApi": {
       "dependsOn": [
         {
@@ -30,6 +44,11 @@
     }
   },
   "function": {
+    "cardPaymentFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "donateApi": {
       "build": true,
       "dependsOn": [],
@@ -38,6 +57,38 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_cardPaymentFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cardPaymentFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_cardPaymentFunction_environment": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cardPaymentFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_cardPaymentFunction_pagseguroAccessToken": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cardPaymentFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_cardPaymentFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cardPaymentFunction"
+        }
+      ]
+    },
     "AMPLIFY_function_donateApi_clientId": {
       "usedBy": [
         {

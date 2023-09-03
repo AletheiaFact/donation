@@ -1,0 +1,13 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "environment",
+      "environmentVariableName": "ENVIRONMENT"
+    },
+    {
+      "cloudFormationParameterName": "pagseguroAccessToken",
+      "environmentVariableName": "PAGSEGURO_ACCESS_TOKEN"
+    }
+  ]
+}
