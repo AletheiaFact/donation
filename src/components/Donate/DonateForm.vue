@@ -1,15 +1,17 @@
 <template>
-    <form class="donate-form">
+    <form
+        id="Donate_form"
+    >
         <h2 class="donate-title">Valor da doação (Real)</h2>
         <section class="amount-section">
             <ul>
                 <li
                     class="amount-list-item"
                     v-for="amount in predefinedAmounts" :key="amount.id"
-                    @click="handleAmountSelection(amount.value, true)"
-                    :class="{ active_amount: selectedAmount === amount.value && selectedAmount !== customAmountValue }"
+                    @click="handleAmountSelection(amount.value)"
+                    :class="{ active_amount: totalAmount === amount.value && isCustomButtonSelected !== true }"
                 >
-                    <input :id="amount.id" type="radio" v-model="selectedAmount" :value="amount.value" />
+                    <input :id="amount.id" type="radio" v-model="totalAmount" :value="amount.value" />
                     <label>{{ amount.label }}</label>
                 </li>
                 <li
@@ -18,7 +20,6 @@
                     @click="handleCustomButtonClicked"
                     :class="{ active_amount: isCustomButtonSelected}"
                 >
-                    <input id="other" type="radio" v-model="customAmountValue" :value="customAmountValue" />
                     <label>Other</label>
                     <input
                         ref="customInput"
@@ -30,141 +31,62 @@
                     />
                 </li>
             </ul>
-            <div class="text-error" v-if="error">{{ error }}</div>
-            <div v-if="taxAmount !== null && taxAmount > 0" style="margin-top: 8px; display: flex; gap: 4px; align-items: flex-start;">
-                <div style="margin-top: 4px;">
-                    <input type="checkbox" id="tax_amount" @change="handleTaxCheckboxChange" />
-                </div>
-                <div>
-                    <span style="font-size: 12px; text-align: justify;">
-                        Acrescentarei generosamente R${{ taxAmount.toFixed(2) }} para cobrir as taxas de transação para que você possa ficar com 100% da minha doação.
-                    </span>
-                </div>
-            </div>
             <div style="margin-top: 8px;">
                 <PaypalButton :amount="totalAmount" />
             </div>
-            <div class="donation_explanation">
-                <h4>Para onde vai sua doação</h4>
-                <p><strong>Tecnologia:</strong> Servidores, largura de banda, manutenção, desenvolvimento.</p>
-                <p><strong>Pessoas e Projetos:</strong> Os outros sites importantes têm milhares de funcionários. Temos cerca de 30 funcionários e prestadores de serviços para apoiar uma ampla variedade de projetos, tornando a sua doação um grande investimento em uma organização sem fins lucrativos altamente eficiente.</p>
-            </div>
+            
         </section>
     </form>
+    <div class="donation_explanation">
+        <h4>Para onde vai sua doação</h4>
+        <p><strong>Tecnologia:</strong> Servidores, largura de banda, manutenção, desenvolvimento.</p>
+        <p><strong>Pessoas e Projetos:</strong> Os outros sites importantes têm milhares de funcionários. Temos cerca de 30 funcionários e prestadores de serviços para apoiar uma ampla variedade de projetos, tornando a sua doação um grande investimento em uma organização sem fins lucrativos altamente eficiente.</p>
+    </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import PaypalButton from './PaypalButton.vue';
 
-export default defineComponent({
-    name: "DonateForm",
-    components: {
-        PaypalButton
-    },
-    data() {
-        return {
-            predefinedAmounts: [
-                { id: '2', label: 'R$ 2', value: 2 },
-                { id: '5', label: 'R$ 5', value: 5 },
-                { id: '10', label: 'R$ 10', value: 10 },
-                { id: '20', label: 'R$ 20', value: 20 },
-                { id: '30', label: 'R$ 30', value: 30 },
-                { id: '50', label: 'R$ 50', value: 50 },
-                { id: '100', label: 'R$ 100', value: 100 },
-            ],
-            customAmountValue: null as number | null,
-            taxAmount: null as number | null,
-            selectedAmount: null as number | null,
-            totalAmount: null as number | null,
-            isChecked: false,
-            isCustomButtonSelected: false,
-            error: null as string | null,
-        };
-    },
-    methods: {
-        handleAmountSelection(amount: number, predefinedAmounts: boolean): void {
-            this.hideErrorMessage()
-            this.customAmountValue = null
-            if (predefinedAmounts) this.clearValues();
-            this.selectedAmount = amount;
-            this.calculateTotalAmount(this.selectedAmount)
-        },
+const predefinedAmounts = [
+    { id: '2', label: 'R$ 2', value: 2 },
+    { id: '5', label: 'R$ 5', value: 5 },
+    { id: '10', label: 'R$ 10', value: 10 },
+    { id: '20', label: 'R$ 20', value: 20 },
+    { id: '30', label: 'R$ 30', value: 30 },
+    { id: '50', label: 'R$ 50', value: 50 },
+    { id: '100', label: 'R$ 100', value: 100 },
+]
 
-        handleCustomAmountInput(event: Event): void {
-            const target = event.target as HTMLInputElement;
-            if (target instanceof HTMLInputElement) {
-                const inputValue = target.value;
-                this.customAmountValue = Number(inputValue);
-                this.CustomValueIsGreaterThanMinumunValue(this.customAmountValue);
-                if (this.customAmountValue >= 0) {
-                    this.calculateTotalAmount(this.customAmountValue);
-                }
-            }
-        },
+const totalAmount = ref()
+const customAmountValue = ref()
+const isCustomButtonSelected = ref()
+const customInput = ref()
 
-        hideErrorMessage() {
-            const errorElement = document.querySelector('#error')
-            if (errorElement) {
-                errorElement.classList.add('hidden');
-            }
-        },
+const handleAmountSelection = (amount: number): void => {
+    customAmountValue.value = null;
+    clearTotalAmountAndButtonSelectedValues();
+    totalAmount.value = amount;
+}
 
-        CustomValueIsGreaterThanMinumunValue(value: number): void {
-            if(value >= 0 && value <= 0.93) {
-                this.error = value >= 0 && value <= 0.93 ? "Por favor selecione uma quantidade (mínimo 0.93 Reais)" : null
-            } else {
-                this.hideErrorMessage()
-            }
-        },
+const handleCustomAmountInput = (event: Event): void  =>{
+    const target = event.target as HTMLInputElement;
+    totalAmount.value = Number(target.value);
+}
 
-        calculateTaxAmount(amount: number): void {
-            this.taxAmount = amount >= 9 ? (amount * 0.04) : 0.35
-        },
+const handleCustomButtonClicked = () => {
+    clearTotalAmountAndButtonSelectedValues();
+    isCustomButtonSelected.value = true;
+    customInput.value.focus();
+}
 
-        handleTaxCheckboxChange(event: Event): void {
-            const target = event.target as HTMLInputElement;
-            if (target) {
-                this.isChecked = target.checked;
-                if (this.isChecked) {
-                    this.addTaxAmountToTotalAmount(this.totalAmount);
-                } else {
-                    this.totalAmount = this.selectedAmount || this.customAmountValue;
-                }
-            }
-        },
-        addTaxAmountToTotalAmount(amount: any) {
-            this.totalAmount = amount + this.taxAmount
-        },
-
-        calculateTotalAmount(amount: number) {
-            this.calculateTaxAmount(amount)
-            if(this.isChecked) this.addTaxAmountToTotalAmount(amount)
-            else this.totalAmount = amount;
-        },
-        
-        handleCustomButtonClicked() {
-            this.clearValues();
-            this.isCustomButtonSelected = true;
-            this.$nextTick(() => {
-                const customInput = this.$refs.customInput as HTMLInputElement | undefined;
-                if (customInput) {
-                    customInput.focus();
-                }
-            });
-        },
-
-        clearValues() {
-            this.isCustomButtonSelected = false
-            this.selectedAmount = null
-            this.totalAmount = null;
-        },
-    },
-});
+const clearTotalAmountAndButtonSelectedValues = () => {
+    isCustomButtonSelected.value = false
+    totalAmount.value = null;
+}
 </script>
 
 <style scoped>
-
 .donate-title {
     margin-bottom: 6px;
     text-align: center;
