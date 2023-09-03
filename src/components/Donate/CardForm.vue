@@ -1,5 +1,5 @@
 <template>
-    <a-spin :spinning="spinning.value" :delay="500" :indicator="indicator">
+    <a-spin :spinning="spinning.value" :delay="0" :indicator="indicator" style="display: flex; justify-content: center;">
         <a-form
             v-if="isCardFormVisible"
             id="Card_form"
@@ -10,24 +10,24 @@
             @finish="onFinish"
         >
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px">
-                <a-form-item label="Nome" name="firstName">
+                <a-form-item class="form-item" label="Nome" name="firstName">
                     <a-input v-model:value="formData.firstName" placeholder="Nome" />
                 </a-form-item>
-                <a-form-item label="Sobrenome" name="lastName">
+                <a-form-item class="form-item" label="Sobrenome" name="lastName">
                     <a-input v-model:value="formData.lastName" placeholder="Sobrenome" />
                 </a-form-item>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0;">
-                <a-form-item label="Email" name="email">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <a-form-item class="form-item" label="Email" name="email">
                     <a-input v-model:value="formData.email" placeholder="email@gmail.com" />
                 </a-form-item>
-                <a-form-item label="CPF" name="taxId">
+                <a-form-item class="form-item" label="CPF" name="taxId">
                     <a-input v-model:value="formData.taxId" placeholder="000.000.000-00" v-maska data-maska="###.###.###-##" />
                 </a-form-item>
             </div>
 
-            <a-form-item label="Nome no cartão" name="holder">
+            <a-form-item class="form-item" label="Nome no cartão" name="holder">
                 <a-input
                     v-model:value="formData.holder"
                     placeholder="Nome"
@@ -37,7 +37,7 @@
                 />
             </a-form-item>
             
-            <a-form-item label="Número do cartão" name="cardNumber" style="margin: 10px 0;">
+            <a-form-item class="form-item" label="Número do cartão" name="cardNumber">
                 <a-input
                     v-model:value="formData.cardNumber"
                     placeholder="4111.1111.1111.1111"
@@ -48,38 +48,42 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                 <div style="display: grid; grid-template-columns: 80px 80px; gap: 8px;">
-                    <a-form-item label="Mês" name="monthExpiration">
-                        <a-select v-model:value="formData.monthExpiration" placeholder="mm">
-                            <a-select-option disabled value="" selected>mm</a-select-option>
-                            <a-select-option v-for="month in months" :key="month">{{ month }}</a-select-option>
-                        </a-select>
+                    <a-form-item class="form-item" label="Mês" name="monthExpiration">
+                        <select  v-model="formData.monthExpiration">
+                            <option v-for="month in months" :key="month">{{ month }}</option>
+                        </select>
                     </a-form-item>
-                    <a-form-item label="Ano" name="yearExpiration">
-                        <a-select v-model:value="formData.yearExpiration">
-                            <a-select-option disabled value="" selected>aaaa</a-select-option>
-                            <a-select-option v-for="year in years" :key="year">{{ year }}</a-select-option>
-                        </a-select>
+                    <a-form-item  class="form-item" label="Ano" name="yearExpiration">
+                        <select v-model="formData.yearExpiration">
+                            <option v-for="year in years" :key="year">{{ year }}</option>
+                    </select>
                     </a-form-item>
                 </div>
-                <a-form-item label="CVV" name="cvv">
+                <a-form-item class="form-item" label="CVV" name="cvv">
                     <a-input v-model:value="formData.cvv" placeholder="123" v-maska data-maska="####" />
                 </a-form-item>
             </div>
-            <a-form-item>
-                <a-button style="margin-top: 10px; width: 100%;" html-type="submit">Doar</a-button>
+            <a-form-item class="form-item">
+                <a-button style="width: 100%;" html-type="submit">Doar</a-button>
             </a-form-item>
         </a-form>
     </a-spin>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { API } from "aws-amplify"
 import { LoadingOutlined } from '@ant-design/icons-vue';
 import { reactive, ref, h } from 'vue';
 import { vMaska } from "maska"
 import { message } from 'ant-design-vue';
 
-const { isCardFormVisible } = defineProps(['isCardFormVisible']);
+declare global {
+	interface Window {
+		PagSeguro: any;
+	}
+}
+
+const { isCardFormVisible, hideCardForm } = defineProps(['isCardFormVisible', 'hideCardForm']);
 
 const currentYear = new Date().getFullYear()
 
@@ -89,7 +93,7 @@ const months = [...Array(12)].map((_, index) => {
 const years = [...Array(8)].map((_, index) => currentYear + index);
 
 const cardHolderOptions = {
-  preProcess: val => val.toUpperCase()
+  preProcess: (val: string) => val.toUpperCase()
 }
 
 const formRef = ref();
@@ -107,6 +111,7 @@ const formData = reactive({
     monthExpiration: '',
     yearExpiration: '',
     cvv: '',
+    encryptedCard: '',
 });
 
 const indicator = h(LoadingOutlined, {
@@ -121,10 +126,15 @@ const onFinish = () => {
         .validate()
         .then(() => {
             const activeListItem = document.querySelector('.active_amount')
-            amount.value = activeListItem.querySelector('input').value;
+            if (activeListItem) {
+                const inputElement = activeListItem.querySelector('input');
+                if (inputElement) {
+                    amount.value = Number(inputElement.value);
+                }
+            }
             getEncryptCard()
         })
-        .catch(error => {
+        .catch((error: any) => {
             console.log('error', error);
         });
 };
@@ -137,7 +147,7 @@ const convertAmountValueToPagbankStandard = () => {
 }
 
 const createEncryptCard = () => {
-    return PagSeguro.encryptCard({
+    return window.PagSeguro.encryptCard({
         publicKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr+ZqgD892U9/HXsa7XqBZUayPquAfh9xx4iwUbTSUAvTlmiXFQNTp0Bvt/5vK2FhMj39qSv1zi2OuBjvW38q1E374nzx6NNBL5JosV0+SDINTlCG0cmigHuBOyWzYmjgca+mtQu4WczCaApNaSuVqgb8u7Bd9GCOL4YJotvV5+81frlSwQXralhwRzGhj/A57CGPgGKiuPT+AOGmykIGEZsSD9RKkyoKIoc0OS8CPIzdBOtTQCIwrLn2FxI83Clcg55W8gkFSOS6rWNbG5qFZWMll6yl02HtunalHmUlRUL66YeGXdMDC2PuRcmZbGO5a/2tbVppW6mfSWG3NPRpgwIDAQAB",
         holder: formData.holder,
         number: formData.cardNumber.replace(/\./g, ""),
@@ -174,6 +184,7 @@ const sendDetails = async () => {
                 content: () => `${"A doação com cartão de crédito foi concluída com êxito."}`,
             });
             formRef.value.resetFields();
+            hideCardForm();
         } else {
             message.error({
                 content: () => `Erro ao processar o pagamento: ${paymentResponse.message}`,
@@ -188,7 +199,7 @@ const sendDetails = async () => {
     }
 }
 
-const validateCardEncrypted = async (rule, value) => {
+const validateCardEncrypted = async (rule: any) => {
     const fieldName = rule.field;
 
     const errorCodes = {
@@ -198,10 +209,10 @@ const validateCardEncrypted = async (rule, value) => {
         holder: 'INVALID_HOLDER',
     };
 
-    const errorCode = errorCodes[fieldName];
+    const errorCode = errorCodes[fieldName as keyof typeof errorCodes];
     const card = createEncryptCard();
     const errors = card.errors;
-    const hasInvalidField = errors.some(error => error.code === errorCode);
+    const hasInvalidField = errors.some((error: any) => error.code === errorCode);
 
     if (hasInvalidField) {
         return Promise.reject();
@@ -234,7 +245,7 @@ const rules = {
         { required: true, validator: validateCardEncrypted, message: 'Mês de expiração inválido', trigger: 'blur' },
     ],
     yearExpiration: [
-        { rquired: true, validator: validateCardEncrypted, message: 'Ano de expiração inválido', trigger: 'blur' },
+        { required: true, validator: validateCardEncrypted, message: 'Ano de expiração inválido', trigger: 'blur' },
     ],
     cvv: [{ required: true, message: 'Campo obrigatório', trigger: 'change' }],
 };
@@ -247,8 +258,8 @@ const rules = {
     margin-top: 8px;
 }
 
-#Card_form a-input,
-#Card_form a-select {
+#Card_form input,
+#Card_form select {
     background: rgb(245, 245, 245);
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
     border-radius: 4px;
@@ -275,20 +286,23 @@ const rules = {
     border-color: #11273a;
     color: #fff;
 }
+
 a-input::placeholder,
 a-select::placeholder {
     color: #929292;
 }
 
-a-input:focus,
-a-select:focus {
-    border: none;
+input:focus,
+select:focus {
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
 }
 
-#Card_form_error {
-    color: #ff4d4f;
-    font-size: 12px;
+select::placeholder {
+    color: green;
+}
+
+.form-item {
+    margin-bottom: 8px;
 }
 
 </style>

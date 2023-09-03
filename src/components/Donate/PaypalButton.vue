@@ -1,5 +1,4 @@
 <template>
-	<div id="error" class="hidden">Por favor selecione uma quantidade (mínimo 0.93 Reais)</div>
 	<div ref="paypal"></div>
 </template>
   
@@ -18,6 +17,7 @@ export default defineComponent({
 	name: "PaypalButton",
 	props: {
     	amount: Number as () => number | null,
+		handleClick: Function,
   	},
 	mounted: function() {
 		window.paypal.Buttons({
@@ -39,13 +39,7 @@ export default defineComponent({
 					});
 				});
 			},
-			onClick: function() {
-				//TODO: Add Umami analytics
-				if(document.querySelector('.active_amount') === null) {
-					const errorElement = document.querySelector('#error')
-					if(errorElement) errorElement.classList.remove('hidden');
-				}
-			},
+			onClick: this.handleClick,
 			createOrder: async () => {
 				try {
 					const response = 
@@ -88,17 +82,3 @@ export default defineComponent({
 	}
 })
 </script>
-
-<style scoped>
-
-#error {
-    margin: 8px 0;
-    color: #ff4d4f;
-    font-size: 12px;
-}
-
-.hidden {
-	display: none;
-}
-
-</style>
