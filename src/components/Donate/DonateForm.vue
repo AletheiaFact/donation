@@ -7,7 +7,10 @@
                     class="amount-list-item"
                     v-for="amount in predefinedAmounts" :key="amount.id"
                     @click="handleAmountSelection(amount.value)"
-                    :class="{ active_amount: totalAmount === amount.value && isCustomButtonSelected !== true }"
+                    :class="{
+                        active_amount: amount.value === (totalAmount - (isChecked ? taxAmount : 0))
+                        && isCustomButtonSelected !== true
+                    }"
                 >
                     <input :id="amount.id" type="radio" v-model="totalAmount" :value="amount.value" />
                     <label>{{ amount.label }}</label>
@@ -30,6 +33,16 @@
                 </li>
             </ul>
             <div v-if="showError" id="error">Por favor selecione uma quantidade (mínimo 0.93 Reais)</div>
+            <div v-if="taxAmount" style="margin-top: 8px; display: flex; gap: 4px; align-items: flex-start;">
+                <div style="margin-top: 4px;">
+                    <input type="checkbox" id="tax_amount" @change="handleTaxCheckboxChange" />
+                </div>
+                <div>
+                    <span style="font-size: 12px; text-align: justify;">
+                        Acrescentarei generosamente R${{ taxAmount.toFixed(2) }} para cobrir as taxas de transação para que você possa ficar com 100% da minha doação.
+                    </span>
+                </div>
+            </div>
             <div style="margin-top: 8px;">
                 <PaypalButton :amount="totalAmount" :handleClick="handleClickPaypalButton" />
             </div>
@@ -48,7 +61,11 @@
                     <span style="margin-top: 5px;"><CreditCardOutline /></span>
                     Cartão de crédito ou débito
                 </button>
-                <CardForm :isCardFormVisible="isCardFormVisible" :hideCardForm="hideCardForm" />
+                <CardForm
+                    :isCardFormVisible="isCardFormVisible"
+                    :hideCardForm="hideCardForm"
+                    :getAmountValue="getAmountValue"
+                />
             </div>
         </section>
     </form>
@@ -75,24 +92,26 @@ const predefinedAmounts = [
     { id: '100', label: 'R$ 100', value: 100 },
 ]
 
-const totalAmount = ref()
-const customAmountValue = ref()
-const isCustomButtonSelected = ref()
-const customInput = ref()
-const isCardFormVisible = ref(false)
-const showError = ref(false)
+const totalAmount = ref();
+const customAmountValue = ref();
+const isCustomButtonSelected = ref();
+const customInput = ref();
+const isCardFormVisible = ref(false);
+const showError = ref(false);
+const isChecked = ref(false);
+const taxAmount = ref(0);
 
 const handleAmountSelection = (amount: number): void => {
     showError.value = false
     customAmountValue.value = null;
     clearTotalAmountAndButtonSelectedValues();
-    totalAmount.value = amount;
+    calculateTotalAmount(amount)
 }
 
 const handleCustomAmountInput = (event: Event): void  =>{
     showError.value = false
     const target = event.target as HTMLInputElement;
-    totalAmount.value = Number(target.value);
+    calculateTotalAmount(Number(target.value))
 }
 
 const handleCustomButtonClicked = () => {
@@ -125,6 +144,28 @@ const handleClickPaypalButton = () => {
         showError.value = true
     }
 }
+
+const calculatePaypalDomesticFeeDeduction = (amount: number) => {
+    taxAmount.value = amount * 0.0499 + 0.60
+}
+
+const handleTaxCheckboxChange = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    isChecked.value = target.checked;
+    if (isChecked.value) addTaxAmountToTotalAmount(totalAmount.value);
+}
+
+const addTaxAmountToTotalAmount = (amount: number) => {
+    totalAmount.value = amount + taxAmount.value
+}
+
+const calculateTotalAmount = (amount: number) => {
+    calculatePaypalDomesticFeeDeduction(amount)
+    if(isChecked.value) addTaxAmountToTotalAmount(amount)
+    else totalAmount.value = amount;
+}
+
+const getAmountValue = () => totalAmount.value
 </script>
 
 <style scoped>
