@@ -50,12 +50,12 @@
                 <div style="display: grid; grid-template-columns: 80px 80px; gap: 8px;">
                     <a-form-item class="form-item" label="Mês" name="monthExpiration">
                         <select  v-model="formData.monthExpiration">
-                            <option v-for="month in months" :key="month">{{ month }}</option>
+                            <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
                         </select>
                     </a-form-item>
                     <a-form-item  class="form-item" label="Ano" name="yearExpiration">
                         <select v-model="formData.yearExpiration">
-                            <option v-for="year in years" :key="year">{{ year }}</option>
+                            <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
                     </select>
                     </a-form-item>
                 </div>
