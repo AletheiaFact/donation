@@ -83,7 +83,7 @@ declare global {
 	}
 }
 
-const { isCardFormVisible, hideCardForm } = defineProps(['isCardFormVisible', 'hideCardForm']);
+const { isCardFormVisible, hideCardForm, getAmountValue } = defineProps(['isCardFormVisible', 'hideCardForm', 'getAmountValue']);
 
 const currentYear = new Date().getFullYear()
 
@@ -125,26 +125,13 @@ const onFinish = () => {
     formRef.value
         .validate()
         .then(() => {
-            const activeListItem = document.querySelector('.active_amount')
-            if (activeListItem) {
-                const inputElement = activeListItem.querySelector('input');
-                if (inputElement) {
-                    amount.value = Number(inputElement.value);
-                }
-            }
+            amount.value = getAmountValue()
             getEncryptCard()
         })
         .catch((error: any) => {
             console.log('error', error);
         });
 };
-
-const convertAmountValueToPagbankStandard = () => {
-    const amountStr = amount.value.toString();
-
-    if (amountStr.includes('.')) return parseInt(amountStr.replace(".","00"))
-    else return parseInt(amountStr + '00');
-}
 
 const createEncryptCard = () => {
     return window.PagSeguro.encryptCard({
@@ -171,7 +158,7 @@ const sendDetails = async () => {
         console.log("send", amount)
         spinning.value = true;
 
-        const url = `/card/${convertAmountValueToPagbankStandard()}`
+        const url = `/card/${amount.value * 100}`
         const response = 
             await API.post("PaymentAletheiaApi", url, {
                 body: formData
