@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/card": {
+      "name": "/card",
+      "lambdaFunction": "cardPaymentFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

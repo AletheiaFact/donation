@@ -1,7 +1,5 @@
 <template>
-    <form
-        id="Donate_form"
-    >
+    <form id="Donate_form">
         <h2 class="donate-title">Valor da doação (Real)</h2>
         <section class="amount-section">
             <ul>
@@ -31,10 +29,27 @@
                     />
                 </li>
             </ul>
+            <div v-if="showError" id="error">Por favor selecione uma quantidade (mínimo 0.93 Reais)</div>
             <div style="margin-top: 8px;">
-                <PaypalButton :amount="totalAmount" />
+                <PaypalButton :amount="totalAmount" :handleClick="handleClickPaypalButton" />
             </div>
-            
+            <div>
+                <button
+                    class="credit-card-button"
+                    @click="showCardForm($event)"
+                    style="
+                        width: 100%;
+                        display: flex;
+                        margin-top: 4px;
+                        gap: 8px;
+                        align-items: center;
+                    "
+                >
+                    <span style="margin-top: 5px;"><CreditCardOutline /></span>
+                    Cartão de crédito ou débito
+                </button>
+                <CardForm :isCardFormVisible="isCardFormVisible" :hideCardForm="hideCardForm" />
+            </div>
         </section>
     </form>
     <div class="donation_explanation">
@@ -47,6 +62,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import PaypalButton from './PaypalButton.vue';
+import CreditCardOutline from "vue-material-design-icons/CreditCardOutline.vue"
+import CardForm from './CardForm.vue';
 
 const predefinedAmounts = [
     { id: '2', label: 'R$ 2', value: 2 },
@@ -62,14 +79,18 @@ const totalAmount = ref()
 const customAmountValue = ref()
 const isCustomButtonSelected = ref()
 const customInput = ref()
+const isCardFormVisible = ref(false)
+const showError = ref(false)
 
 const handleAmountSelection = (amount: number): void => {
+    showError.value = false
     customAmountValue.value = null;
     clearTotalAmountAndButtonSelectedValues();
     totalAmount.value = amount;
 }
 
 const handleCustomAmountInput = (event: Event): void  =>{
+    showError.value = false
     const target = event.target as HTMLInputElement;
     totalAmount.value = Number(target.value);
 }
@@ -83,6 +104,26 @@ const handleCustomButtonClicked = () => {
 const clearTotalAmountAndButtonSelectedValues = () => {
     isCustomButtonSelected.value = false
     totalAmount.value = null;
+}
+
+const showCardForm = (event: Event) => {
+    event.preventDefault();
+    if(totalAmount.value) {
+        isCardFormVisible.value = !isCardFormVisible.value
+    } else {
+        showError.value = true
+    }
+}
+
+const hideCardForm = () => {
+    isCardFormVisible.value = false
+}
+
+const handleClickPaypalButton = () => {
+    //TODO: Add Umami analytics
+    if(!totalAmount.value) {
+        showError.value = true
+    }
 }
 </script>
 
@@ -187,8 +228,8 @@ input[type=number]::-webkit-outer-spin-button {
     color: #000;
 }
 
-.text-error {
-    margin-top: 8px;
+#error {
+    margin: 8px 0;
     color: #ff4d4f;
     font-size: 12px;
 }
@@ -202,5 +243,18 @@ input[type=number]::-webkit-outer-spin-button {
 .donation_explanation > p {
     font-size: 12px;
     line-height: 1.1rem;
+}
+
+.credit-card-button {
+    border-width: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    padding-bottom: 0;
+    border-radius: 4px;
+    background: #11273a;
+    border-color: #11273a;
+    color: #fff;
 }
 </style>
