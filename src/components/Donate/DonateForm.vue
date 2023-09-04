@@ -1,11 +1,5 @@
 <template>
-<<<<<<< HEAD
-    <form
-        id="Donate_form"
-    >
-=======
     <form id="Donate_form">
->>>>>>> 53c0370 (- styled form)
         <h2 class="donate-title">Valor da doação (Real)</h2>
         <section class="amount-section">
             <ul>
