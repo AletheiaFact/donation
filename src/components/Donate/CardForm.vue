@@ -161,9 +161,17 @@ const sendDetails = async () => {
         const url = `/card/${amount.value * 100}`
         const response = 
             await API.post("PaymentAletheiaApi", url, {
-                body: formData
-            })                
-        
+                body: {
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    taxId: formData.taxId,
+                    holder: formData.holder,
+                    securityCode: formData.cvv,
+                    email: formData.email,
+                    encryptedCard: formData.encryptedCard,
+                }
+            })
+
         const paymentResponse = response.charges[0].payment_response
         
         if (paymentResponse.code === "20000") {
