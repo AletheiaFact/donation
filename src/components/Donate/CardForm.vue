@@ -64,7 +64,14 @@
                 </a-form-item>
             </div>
             <a-form-item class="form-item">
-                <a-button style="width: 100%;" html-type="submit">Doar</a-button>
+                <a-button
+                    id="finish-payment"
+                    style="width: 100%;"
+                    html-type="submit"
+                    @click="trackUmamiEvent('complete-donation-button', 'donation')"
+                >
+                    Doar
+                </a-button>
             </a-form-item>
         </a-form>
     </a-spin>
@@ -76,6 +83,7 @@ import { LoadingOutlined } from '@ant-design/icons-vue';
 import { reactive, ref, h } from 'vue';
 import { vMaska } from "maska"
 import { message } from 'ant-design-vue';
+import { trackUmamiEvent } from "../../lib/umami"
 
 declare global {
 	interface Window {
@@ -135,7 +143,7 @@ const onFinish = () => {
 
 const createEncryptCard = () => {
     return window.PagSeguro.encryptCard({
-        publicKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr+ZqgD892U9/HXsa7XqBZUayPquAfh9xx4iwUbTSUAvTlmiXFQNTp0Bvt/5vK2FhMj39qSv1zi2OuBjvW38q1E374nzx6NNBL5JosV0+SDINTlCG0cmigHuBOyWzYmjgca+mtQu4WczCaApNaSuVqgb8u7Bd9GCOL4YJotvV5+81frlSwQXralhwRzGhj/A57CGPgGKiuPT+AOGmykIGEZsSD9RKkyoKIoc0OS8CPIzdBOtTQCIwrLn2FxI83Clcg55W8gkFSOS6rWNbG5qFZWMll6yl02HtunalHmUlRUL66YeGXdMDC2PuRcmZbGO5a/2tbVppW6mfSWG3NPRpgwIDAQAB",
+        publicKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5DL4Qj/3jAQlEVQuayjwEpAs13OzxBsRygW2BzkydD/5qs5fOjlnKfUizqYvbFA1nb3Hx2tTI+YOVOOzIfP1I0aarblDZpl9bJvhBTB20lOaVGhK/KCr4WjHhBYBepyd17qXzfp/jeNtUSz0V+XAQg/drvreQwuAUELonS2W9nbqYHPjlUqUcB4GSXcMnUxjFg/b0S7+BXxDtumkBm+S3FrpgjeCdXgqIUZBp4/Isypnw48AfCWQgPMEqs5wk6Ysa4Mv8zKpx1sAP+XTjQNO4zy/dOr3iNv3LitI9LWLGZKhqNGuITwn3Rrp3O0LXftiT1yK92K3hpGWMm2t3YKFMQIDAQAB",
         holder: formData.holder,
         number: formData.cardNumber.replace(/\./g, ""),
         expMonth: formData.monthExpiration,
@@ -155,7 +163,6 @@ const getEncryptCard = () => {
 
 const sendDetails = async () => {
     try {
-        console.log("send", amount)
         spinning.value = true;
 
         const url = `/card/${amount.value * 100}`
