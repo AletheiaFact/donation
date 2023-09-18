@@ -156,7 +156,7 @@ const handleTaxCheckboxChange = (event: Event) => {
     const target = event.target as HTMLInputElement;
     isChecked.value = target.checked;
     if (isChecked.value) addTaxAmountToTotalAmount(totalAmount.value);
-    trackUmamiEvent(`cover-donation-fees-checkbox`, 'donation')
+    trackUmamiEvent(`cover-donation-fees-${isChecked.value ? "checked" : "unchecked"}`, 'donation')
 }
 
 const addTaxAmountToTotalAmount = (amount: number) => {
