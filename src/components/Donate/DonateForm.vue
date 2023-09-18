@@ -72,7 +72,7 @@
     <div class="donation_explanation">
         <h4>Para onde vai sua doação</h4>
         <p><strong>Tecnologia:</strong> Servidores, largura de banda, manutenção, desenvolvimento.</p>
-        <p><strong>Pessoas e Projetos:</strong> Os outros sites importantes têm milhares de funcionários. Temos cerca de 30 funcionários e prestadores de serviços para apoiar uma ampla variedade de projetos, tornando a sua doação um grande investimento em uma organização sem fins lucrativos altamente eficiente.</p>
+        <p><strong>Pessoas e Projetos:</strong> Os outros sites importantes têm milhares de funcionários. Nosso time é pequeno com uma mistura de voluntários e prestadores de serviços para apoiar uma ampla variedade de projetos, tornando a sua doação um grande investimento em uma organização sem fins lucrativos altamente eficiente.</p>
     </div>
 </template>
 
