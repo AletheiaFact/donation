@@ -2,7 +2,7 @@
     <header className="logo">
         <svg
             height="100"
-            viewBox="0 0 957 517"
+            viewBox="0 0 1057 617"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
@@ -20,36 +20,45 @@
             />
         </svg>
     </header>
-    <main>
-        <section style="padding: 10px 0;">
-            <Title msg="Queremos que todos tenham igual acesso ao conhecimento, para sempre" />
-            <Paragraph msg="Obrigado por considerar uma doação para a Aletheia, a organização sem fins lucrativos que hospeda a Aletheia e outros projetos cruciais de conhecimento gratuito." />
-            <Paragraph msg="A cada ano, graças aos 2% de leitores que doam para apoiar a nossa missão, podemos expandir o alcance do conhecimento gratuito para novos cantos do mundo. Se Aletheia é importante e útil para você também, junte-se a eles e doe 5€, 20€, 50€ ou o que achar melhor para você hoje." />
-            <Paragraph msg="Aletheia é diferente. Sem publicidade, sem taxas de assinatura, sem acesso pago. Esses não pertencem aqui. Aletheia é um lugar para aprender, livre de preconceitos ou agendas." />
-            <Paragraph msg="Hoje, convidamos você a doar o que achar melhor. Mostre ao mundo que o acesso a informações independentes e imparciais é importante para você." />
-            <Paragraph msg="obrigado." />
+    <main class="container">
+        <section>
+            <div class="main-content">
+                <Title msg="Queremos que todos tenham a capacidade de checar e mediar informações, e você pode fazer a diferença." />
+                <Paragraph msg="Agradecemos por considerar uma doação para a AletheiaFact.org. Sua contribuição é um pilar vital para a organização que está à frente do movimento pela democratização da checagem de fatos no Brasil." />
+                <Paragraph msg="Graças a pessoas como você, que valorizam a verdade e a informação confiável, podemos continuar nosso trabalho, combatendo a disseminação de fake news e promovendo a autonomia no consumo de informações. Se nossa causa lhe é importante, apoie-nos com R$10, R$50, R$100 ou o valor que puder." />
+                <Paragraph msg="A AletheiaFact.org é única e depende da comunidade. Sem anúncios, sem assinaturas, somos movidos pela paixão de garantir acesso livre e confiável à informação. Com sua ajuda, continuamos sendo um referencial de confiança." />
+                <Paragraph msg="Hoje, pedimos que nos apoie nesse compromisso com a verdade. Mostre ao Brasil que informações confiáveis e imparciais são essenciais e que você está ao nosso lado nessa missão." />
+                <Paragraph msg="Gratidão por se juntar a nós nesse propósito." />
+            </div>
     
-            <section class="aletheia_qrcode">
-                <img className="aletheia_pix" alt="aletheia-pix-qrcode" src="./assets/aletheia-pix.png" />
+            <section class="payment-info">
+                <div class="bank-info">
+                    <p class="bank-info-item"><span>Agência: 0001</span></p>
+                    <p class="bank-info-item"><span>Conta: 2513709-4</span></p>
+                    <p class="bank-info-item"><span>Instituição: 403 - Cora SCD</span></p>
+                    <p class="bank-info-item"><span>Nome da Empresa: Movimento Aletheia Fact</span></p>
+                    <p class="bank-info-item"><span>CNPJ: 46.428.905/0001-68</span></p>
+                    <p class="bank-info-item"><span>PIX: 46428905000168</span></p>
+                </div>
+                <div class="aletheia-qrcode">
+                    <img className="aletheia-pix" alt="aletheia-pix-qrcode" src="./assets/aletheia-pix.png" />
+                </div>
             </section>
         </section>
-        <aside className="donation_section">
+        <aside className="donation-section">
             <DonateForm />
         </aside>
     </main>
-    <Footer />
 </template>
 
 <script lang="ts">
 import Title from './components/Title.vue'
-import Footer from "./components/Footer/Footer.vue"
 import Paragraph from './components/Paragraph.vue';
 import DonateForm from './components/Donate/DonateForm.vue';
 
 export default {
     components: {
         Title,
-        Footer,
         Paragraph,
         DonateForm
     },
@@ -57,14 +66,14 @@ export default {
 </script>
 
 <style scoped>
-header.logo {
-    width: 205px; 
+.logo {
+    width: 170px;
     padding: 10px;
     height: 100vh;
 }
 
 main {
-    padding: 2rem 2rem;
+    padding: 2rem 1rem;
 }
 
 section {
@@ -77,19 +86,52 @@ section > p {
     margin: 0.5em 0;
 }
 
-section.aletheia_qrcode {
-    width: 100%;
+.payment-info {
     display: flex;
+    background: #fff;
+    color: #222;
+    border: 1px solid #a2a9b1;
+    border-radius: 4px;
+    margin-top: 16px;
+    padding: 24px;
+    gap: 16px;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.bank-info {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bank-info-item::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 2px;
+    background: rgb(17, 39, 58);
+    position: relative;
+    top: -5px;
+    margin-right: 6px;
+}
+
+div.aletheia-qrcode {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.aletheia_pix {
-    width: 300px;
-    height: 300px;
+.aletheia-pix {
+    width: clamp(200px, 100%, 350px);
+    height: clamp(200px, auto, 350px);
 }
 
-.donation_section {
+.donation-section {
     width: 380px;
     background-color: #fff;
     border: 1px solid #a2a9b1;
@@ -98,16 +140,91 @@ section.aletheia_qrcode {
     color: #222;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 1100px) {
+    .main-content h1 {
+        font-size: 18px;
+    }
+
+    .main-content p {
+        font-size: 14px
+    }
+
+    .bank-info {
+        width: 100%;
+    }
+
+    div.aletheia-qrcode {
+        width: 100%;
+    }
+}
+
+@media (min-width: 968px) {
     main {
         width: calc(100% - 205px);
         display: grid;
         grid-template-columns: auto 380px;
         gap: 24px;
     }
-    div.logo {
+
+    .logo {
         display: flex;
         padding-right: calc(var(--section-gap) / 2);
+    }
+}
+
+@media (max-width: 967px) {
+    .logo {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        height: auto;
+        padding: 0;
+    }
+
+    .container {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .main-content {
+        display: none;
+    }
+
+    .payment-info {
+        margin: 0;
+        max-width: 380px;
+        display: grid;
+        grid-template-columns: 1fr;
+
+    }
+    .bank-info-item {
+        margin: 4px;
+    }
+}
+
+@media (max-width: 568px) {
+    .container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 0 16px;
+    }
+
+    .bank-info-item {
+        margin: 4px;
+    }
+
+    .aletheia-pix {
+        width: 200px
+    }
+    
+    .donation-section {
+        width: 100%;
+        max-width: 380px;
     }
 }
 </style>
