@@ -81,6 +81,7 @@ import { ref } from 'vue';
 import PaypalButton from './PaypalButton.vue';
 import CreditCardOutline from "vue-material-design-icons/CreditCardOutline.vue"
 import CardForm from './CardForm.vue';
+import { trackUmamiEvent } from '../../lib/umami';
 
 const predefinedAmounts = [
     { id: '2', label: 'R$ 2', value: 2 },
@@ -102,6 +103,7 @@ const isChecked = ref(false);
 const taxAmount = ref(0);
 
 const handleAmountSelection = (amount: number): void => {
+    trackUmamiEvent(`amount-donation-button-${amount}`, 'donation')
     showError.value = false
     customAmountValue.value = null;
     clearTotalAmountAndButtonSelectedValues();
@@ -132,6 +134,7 @@ const showCardForm = (event: Event) => {
     } else {
         showError.value = true
     }
+    trackUmamiEvent('show-card-form-button', 'donation')
 }
 
 const hideCardForm = () => {
@@ -139,7 +142,7 @@ const hideCardForm = () => {
 }
 
 const handleClickPaypalButton = () => {
-    //TODO: Add Umami analytics
+    trackUmamiEvent(`paypal-donation-button`, 'donation')
     if(!totalAmount.value) {
         showError.value = true
     }
@@ -153,6 +156,7 @@ const handleTaxCheckboxChange = (event: Event) => {
     const target = event.target as HTMLInputElement;
     isChecked.value = target.checked;
     if (isChecked.value) addTaxAmountToTotalAmount(totalAmount.value);
+    trackUmamiEvent(`cover-donation-fees-${isChecked.value ? "checked" : "unchecked"}`, 'donation')
 }
 
 const addTaxAmountToTotalAmount = (amount: number) => {
