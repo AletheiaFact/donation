@@ -87,7 +87,7 @@
                 href="https://www.instagram.com/aletheiafact"
                 target="_blank"
                 rel="noreferrer"
-                style="border: none; color: white;"
+                style="border: none; color: white; background: rgb(17,39,58);"
             >
                 <instagram />
             </a-button>
@@ -96,7 +96,7 @@
                 href="https://www.facebook.com/AletheiaFactorg-107521791638412"
                 target="_blank"
                 rel="noreferrer"
-                style="border: none; color: white;"
+                style="border: none; color: white; background: rgb(17,39,58);"
             >
                 <facebook />
             </a-button>
@@ -105,7 +105,7 @@
                 href="https://www.linkedin.com/company/aletheiafact-org"
                 target="_blank"
                 rel="noreferrer"
-                style="border: none; color: white;"
+                style="border: none; color: white; background: rgb(17,39,58);"
             >
                 <linkedin />
             </a-button>
@@ -114,7 +114,7 @@
                 href="https://github.com/AletheiaFact/aletheia"
                 target="_blank"
                 rel="noreferrer"
-                style="border: none; color: white;"
+                style="border: none; color: white; background: rgb(17,39,58);"
             >
                 <github />
             </a-button>
