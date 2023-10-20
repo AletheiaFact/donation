@@ -33,7 +33,7 @@
                 </li>
             </ul>
             <div v-if="showError" id="error">Por favor selecione uma quantidade (mínimo 0.93 Reais)</div>
-            <div v-if="taxAmount" style="margin-top: 8px; display: flex; gap: 4px; align-items: flex-start;">
+            <!-- <div v-if="taxAmount" style="margin-top: 8px; display: flex; gap: 4px; align-items: flex-start;">
                 <div style="margin-top: 4px;">
                     <input type="checkbox" id="tax_amount" @change="handleTaxCheckboxChange" />
                 </div>
@@ -42,7 +42,7 @@
                         Acrescentarei generosamente R${{ taxAmount.toFixed(2) }} para cobrir as taxas de transação para que você possa ficar com 100% da minha doação.
                     </span>
                 </div>
-            </div>
+            </div> -->
             <div style="margin-top: 8px;">
                 <PaypalButton :amount="totalAmount" :handleClick="handleClickPaypalButton" />
             </div>
