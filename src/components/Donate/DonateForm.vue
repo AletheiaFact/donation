@@ -46,7 +46,7 @@
             <div style="margin-top: 8px;">
                 <PaypalButton :amount="totalAmount" :handleClick="handleClickPaypalButton" />
             </div>
-            <div>
+            <!--<div>
                 <button
                     class="credit-card-button"
                     @click="showCardForm($event)"
@@ -66,7 +66,7 @@
                     :hideCardForm="hideCardForm"
                     :getAmountValue="getAmountValue"
                 />
-            </div>
+            </div> -->
         </section>
     </form>
     <div class="donation_explanation">
