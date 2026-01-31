@@ -53,9 +53,9 @@
                 </div>
             </section>
         </section>
-        <aside className="donation-section">
+        <!-- <aside className="donation-section">
             <DonateForm />
-        </aside>
+        </aside> -->
     </main>
     <div
         style="
@@ -126,7 +126,6 @@
 <script lang="ts">
 import Title from './components/Title.vue'
 import Paragraph from './components/Paragraph.vue';
-import DonateForm from './components/Donate/DonateForm.vue';
 import Instagram from "vue-material-design-icons/Instagram.vue";
 import Linkedin from 'vue-material-design-icons/Linkedin.vue';
 import Github from 'vue-material-design-icons/Github.vue';
@@ -136,7 +135,6 @@ export default {
     components: {
         Title,
         Paragraph,
-        DonateForm,
         Instagram,
         Linkedin,
         Github,
